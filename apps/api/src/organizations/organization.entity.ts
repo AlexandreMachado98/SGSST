@@ -1,4 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { Company } from '../companies/company.entity.js';
 
 @Entity('organizations')
 export class Organization {
@@ -13,6 +14,9 @@ export class Organization {
 
   @Column({ type: 'varchar', default: 'ACTIVE' })
   status: string;
+
+  @OneToMany(() => Company, (company) => company.organization)
+  companies: Company[];
 
   @CreateDateColumn()
   created_at: Date;

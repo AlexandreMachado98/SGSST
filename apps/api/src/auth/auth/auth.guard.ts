@@ -1,9 +1,10 @@
 import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
-import * as admin from 'firebase-admin';
+import { initializeApp, getApps } from 'firebase-admin/app';
+import { getAuth } from 'firebase-admin/auth';
 
-// Inicializa o app do Firebase Admin. Na produção, as credenciais virão de variáveis de ambiente do GCP.
-if (!admin.apps.length) {
-  admin.initializeApp({
+// Inicializa o app do Firebase Admin se ainda não existir
+if (getApps().length === 0) {
+  initializeApp({
     projectId: process.env.FIREBASE_PROJECT_ID || 'sgsst-dev'
   });
 }
@@ -19,14 +20,10 @@ export class AuthGuard implements CanActivate {
     }
     
     try {
-      // Valida o JWT emitido pelo Firebase
-      const decodedToken = await admin.auth().verifyIdToken(token);
-      
-      // Injeta os dados do usuário (uid, tenant_id, role) no request para uso posterior nos controllers e RLS
+      const decodedToken = await getAuth().verifyIdToken(token);
       request.user = decodedToken;
-      
       return true;
-    } catch (error) {
+    } catch {
       throw new UnauthorizedException('Token inválido ou expirado');
     }
   }

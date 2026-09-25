@@ -8,7 +8,7 @@ export class OrganizationsController {
   constructor(private readonly organizationsService: OrganizationsService) {}
 
   @Get()
-  getOrganizations(@Req() req) {
+  getOrganizations(@Req() req: any) {
     // Aqui garantimos que só chega se tiver token válido.
     // req.user contém o UID do Firebase Auth e as Custom Claims.
     return {
