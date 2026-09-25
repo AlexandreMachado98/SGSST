@@ -1,4 +1,5 @@
 import { Entity, Column, ManyToOne, JoinColumn, PrimaryColumn } from 'typeorm';
+import type { Relation } from 'typeorm';
 import { User } from './user.entity.js';
 import { Company } from '../companies/company.entity.js';
 
@@ -12,11 +13,11 @@ export class UserCompanyRole {
 
   @ManyToOne(() => User, (user) => user.companyRoles)
   @JoinColumn({ name: 'user_id' })
-  user: User;
+  user: Relation<User>;
 
   @ManyToOne(() => Company, (company) => company.userRoles)
   @JoinColumn({ name: 'company_id' })
-  company: Company;
+  company: Relation<Company>;
 
   @Column({ type: 'varchar', length: 50 })
   role: string;

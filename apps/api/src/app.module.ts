@@ -16,13 +16,19 @@ import { UserCompanyRole } from './users/user-company-role.entity.js';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      url: process.env.DATABASE_URL,
-      entities: [Organization, Company, User, UserCompanyRole],
-      synchronize: process.env.NODE_ENV !== 'production', // Use apenas em dev, não em prod!
-      autoLoadEntities: true,
-      logging: process.env.NODE_ENV !== 'production',
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: () => ({
+        type: 'postgres',
+        url: process.env.DATABASE_URL,
+        entities: [Organization, Company, User, UserCompanyRole],
+        synchronize: true, // Use apenas em dev!
+        autoLoadEntities: true,
+        logging: true,
+        ssl: {
+          rejectUnauthorized: false,
+        },
+      }),
     }),
     AuthModule,
     OrganizationsModule,

@@ -1,4 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
+import type { Relation } from 'typeorm';
 import { Organization } from '../organizations/organization.entity.js';
 import { UserCompanyRole } from '../users/user-company-role.entity.js';
 
@@ -12,7 +13,7 @@ export class Company {
 
   @ManyToOne(() => Organization, (org) => org.companies)
   @JoinColumn({ name: 'organization_id' })
-  organization: Organization;
+  organization: Relation<Organization>;
 
   @Column({ type: 'varchar', length: 255 })
   name: string;
@@ -21,7 +22,7 @@ export class Company {
   cnpj: string;
 
   @OneToMany(() => UserCompanyRole, (role) => role.company)
-  userRoles: UserCompanyRole[];
+  userRoles: Relation<UserCompanyRole>[];
 
   @CreateDateColumn()
   created_at: Date;

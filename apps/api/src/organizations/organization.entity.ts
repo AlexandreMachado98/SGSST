@@ -1,4 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import type { Relation } from 'typeorm';
 import { Company } from '../companies/company.entity.js';
 
 @Entity('organizations')
@@ -16,7 +17,7 @@ export class Organization {
   status: string;
 
   @OneToMany(() => Company, (company) => company.organization)
-  companies: Company[];
+  companies: Relation<Company>[];
 
   @CreateDateColumn()
   created_at: Date;
